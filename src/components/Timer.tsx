@@ -25,7 +25,7 @@ export function Timer() {
           />
           <label htmlFor='time' className='ml-2'>minutos.</label>
         </form>
-        <div className='mb-14 font-coutdown text-[10rem] leading-[8rem] text-gray7 font-bold'>
+        <div className='mb-14 font-coutdown text-[10rem] leading-[8rem] text-gray7 font-bold select-none'>
           <span className='bg-gray-700 px-6 py-4 mr-4 rounded-lg'>0</span>
           <span className='bg-gray-700 px-6 py-4 rounded-lg'>0</span>
           <span className='text-green'>:</span>
