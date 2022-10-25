@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
+body {
+  background-color: #121214;
   font-family: 'Roboto', sans-serif;
+  overflow-y: hidden;
+}
+
+.no-arrow::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+
+.active {
+  color: #00875F;
+}
+
+.font-coutdown {
+  font-family: 'Roboto Mono', monospace;
 }
