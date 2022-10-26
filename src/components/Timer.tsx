@@ -3,21 +3,28 @@ import { useForm } from "react-hook-form"
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
+interface TypesFormTimer {
+  task: string,
+  time: number
+}
+
 const createUserFormSchema = yup.object({
   task: yup.string().required("É necessário informar uma tarefa!"),
-  time: yup.number().min(5, "O tempo precisar maior que 5 minutos!").max(60, "O tempo precisar menor que 60 minutos!").required("É necessário informar um tempo!")
+  time: yup.number().min(5, "O tempo precisa ser maior que 5 minutos!").max(60, "O tempo precisa ser menor que 60 minutos!").required("É necessário informar um tempo!")
 })
 
 export function Timer() {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<any>({
+  const { register, handleSubmit, watch, formState: { errors }, reset } = useForm<TypesFormTimer>({
     resolver: yupResolver(createUserFormSchema),
+    defaultValues: {
+      task: '',
+      time: 0,
+    }
   });
 
-  function createTask(data: any) {
+  function createTask(data: TypesFormTimer) {
     console.log(data)
   }
-
-  console.log(errors)
 
   const task = watch('task')
   const buttonDisabled = !task
@@ -28,13 +35,15 @@ export function Timer() {
         <form onSubmit={handleSubmit(createTask)} className='flex flex-col text-gray7 items-center w-full'>
           <div className="flex mb-[100px]">
             <label htmlFor='task' className='font-bold text-lg mr-2'>Vou trabalhar em</label>
-            <input
-              id='task'
-              placeholder="Dê um nome para o seu projeto"
-              className="focus:outline-none text-gray4 bg-transparent h-10 font-bold text-lg px-2 border-b-2 border-gray4 flex-1 text-center no-arrow"
-              list='task-suggestion'
-              {...register('task')}
-            />
+            <div className="flex flex-col">
+              <input
+                id='task'
+                placeholder="Dê um nome para o seu projeto"
+                className={`focus:outline-none text-gray4 bg-transparent h-10 font-bold text-lg px-2 border-b-2 flex-1 text-center no-arrow ${errors?.task ? "border-red" : "border-gray4" }`}
+                list='task-suggestion'
+                {...register('task')}
+              />
+            </div>
             <datalist id="task-suggestion">
               <option>Teste</option>
             </datalist>
@@ -43,8 +52,8 @@ export function Timer() {
               id='time'
               placeholder="0"
               type="number"
-              className="focus:outline-none text-gray4 bg-transparent h-10 w-16 border-b-2 border-gray4 text-center"
-              step={5} min={5} max={60}
+              className={`focus:outline-none text-gray4 bg-transparent h-10 w-16 border-b-2 text-center ${errors?.time ? "border-red" : "border-gray4" }`}
+              min={5} max={60}
               {...register('time', { valueAsNumber: true })}
             />
             <label htmlFor='time' className='ml-2'>minutos.</label>
@@ -59,7 +68,6 @@ export function Timer() {
           <button
             className='bg-green text-white w-full py-5 rounded-lg flex items-center justify-center mb-20 mt-14 transition-all disabled:bg-green disabled:opacity-70 hover:bg-green-dark '
             disabled={buttonDisabled}
-            onSubmit={createTask}
           >
             <Play size={30} className='mr-1' />
             Começar
